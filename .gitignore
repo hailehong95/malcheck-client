@@ -109,6 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea/
 
 # Spyder project settings
 .spyderproject
@@ -127,3 +128,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Other
+*.pri
+*.pyc
+*.zip
+*.exe
+bins/
+keys/
+test/
+releases/
+packer/upx_lin*
