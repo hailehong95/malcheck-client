@@ -3,6 +3,7 @@ import socket
 import psutil
 import platform
 
+from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR, GEOLITE2_DB
 from malcheck_client.utils import write_dicts_to_json_file, geoip_country
 
@@ -51,13 +52,14 @@ def get_network_connection():
             item["country"] = ips_country.get(item.get("remote_address"))
             conn_data.append(item)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return conn_data
 
 
 # Get Network connection on system
 def network_task():
+    logger.info("Starting network connection task")
     network_data = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         network_data = get_network_connection()

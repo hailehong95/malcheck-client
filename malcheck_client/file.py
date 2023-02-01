@@ -4,6 +4,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.config import DATA_DIR, SYSINTERNAL_SIGCHECK
@@ -17,7 +18,7 @@ def sigcheck_csv_to_dicts(csv_file):
         for row in reader:
             data.append(row)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -40,11 +41,11 @@ def sigcheck_scan_on_windows():
         for dir in target_dir:
             csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
             sigcheck_cmd = [SYSINTERNAL_SIGCHECK, "-accepteula", "-nobanner", "-a", "-c", "-e", "-h", "-w", csv_file, "-s", dir]
-            sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE)
+            sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE, shell=True)
             sigcheck_csv.append(csv_file)
             time.sleep(1)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return sigcheck_csv
 
@@ -58,13 +59,14 @@ def get_sigcheck_windows():
                 tmp = sigcheck_csv_to_dicts(csv_)
                 sigcheck_data = sigcheck_data + tmp
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return sigcheck_data
 
 
 # Check files in some location of malware
 def files_task():
+    logger.info("Starting file scanning task")
     files_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

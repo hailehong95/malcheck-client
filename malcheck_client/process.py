@@ -2,6 +2,7 @@ import os
 import psutil
 import platform
 
+from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR
 from malcheck_client.utils import pe_signature_check, get_hash_file
 from malcheck_client.utils import write_dicts_to_json_file
@@ -36,13 +37,14 @@ def get_process_running():
         for item in data:
             item["path"] = item.pop("exe")
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
 
 # Get Process running on system
 def process_task():
+    logger.info("Starting process task")
     process_data = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         process_data = get_process_running()

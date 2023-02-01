@@ -4,6 +4,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.config import DATA_DIR, SYSINTERNAL_AUTORUN
@@ -38,7 +39,7 @@ def autorun_csv_to_dicts(csv_file):
             }
             data.append(tmp)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -50,11 +51,11 @@ def autorun_scan_on_windows():
             os.mkdir(DATA_DIR)
         autorun_csv = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         autorun_cmd = [SYSINTERNAL_AUTORUN, "-accepteula", "-nobanner", "-a", "*", "-c", "-h", "-s", "-m", "-o", autorun_csv]
-        autorun_output = subprocess.run(autorun_cmd, stdout=subprocess.PIPE)
+        autorun_output = subprocess.run(autorun_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
         autorun_csv = ""
-        print(ex)
+        logger.info(str(ex))
     else:
         return autorun_csv
 
@@ -67,13 +68,14 @@ def get_autorun_windows():
         if os.path.exists(autorun_csv):
             data = autorun_csv_to_dicts(autorun_csv)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
 
 # Get Autoruns key: bootstart, persistent, autostart program
 def autorun_task():
+    logger.info("Starting autorun task")
     autorun_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

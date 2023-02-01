@@ -13,6 +13,7 @@ import subprocess
 import geoip2.database
 
 from datetime import datetime
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.config import BINS_DIR, DATA_DIR, KEYS_DIR, BASE_DIR
 from malcheck_client.config import SYSINTERNAL_SIGCHECK, MAX_SIZE_FILE, CWD_DIR
@@ -83,7 +84,7 @@ def pe_signature_check(pe_file):
     try:
         data = dict()
         sigcheck_cmd = [SYSINTERNAL_SIGCHECK, "-accepteula", "-nobanner", pe_file]
-        sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE)
+        sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE, shell=True)
         sigcheck_output = sigcheck_output.stdout.decode("utf-8", errors="ignore").replace("\t", "").splitlines()
 
         data["verified"] = sigcheck_output[1].split(":")[-1]
@@ -91,7 +92,7 @@ def pe_signature_check(pe_file):
         data["publisher"] = sigcheck_output[3].split(":")[-1]
         data["machine_type"] = sigcheck_output[9].split(":")[-1]
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -111,7 +112,7 @@ def get_hash_file(file):
         hash_data["sha1"] = hash_sha1.hexdigest()
         hash_data["sha256"] = hash_sha256.hexdigest()
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return hash_data
 
@@ -130,7 +131,7 @@ def is_valid_file(file):
         if b'4d5a' in pe_header:
             return True
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     return False
 
 
@@ -147,7 +148,7 @@ def write_dicts_to_json_file(dict_data, file_name):
         with open(os.path.join(DATA_DIR, file_name), "w") as fs:
             json.dump(dict_data, fs)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
 
 
 def zip_list_file():
@@ -167,7 +168,7 @@ def zip_list_file():
                 zipObj.write(file_)
         return zip_name
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     finally:
         os.chdir(BASE_DIR)
 
@@ -220,5 +221,5 @@ def geoip_country(db_path, ip_list):
                 ip_country[ip] = response.country.name
         except Exception as ex:
             ip_country[ip] = "unknown"
-            print(ex)
+            logger.info(str(ex))
     return ip_country

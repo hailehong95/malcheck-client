@@ -3,6 +3,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
@@ -18,7 +19,7 @@ def dump_pwsh_events_windows():
         wevtutil_output = subprocess.check_output(wevtutil_cmd, stderr=open(os.devnull, 'w'), shell=True)
         time.sleep(1)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return txt_file
 
@@ -58,7 +59,7 @@ def pwsh_txt_to_dicts(txt_file):
             pwsh_list.append(pwsh_dict)
         time.sleep(1)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return pwsh_list
 
@@ -69,12 +70,13 @@ def get_pwsh_logs_windows():
         txt_file = dump_pwsh_events_windows()
         pwsh_list = pwsh_txt_to_dicts(txt_file)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     return pwsh_list
 
 
 # Get powershell event/log on system
 def pwsh_task():
+    logger.info("Starting powershell log task")
     pwsh_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

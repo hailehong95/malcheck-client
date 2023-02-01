@@ -8,6 +8,7 @@ import platform
 import subprocess
 from datetime import datetime
 
+from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.utils import internet_check_by_requests
@@ -74,19 +75,20 @@ def get_system_info():
         # temp["primary_network"] = get_primary_network()
         if os_platform == "Windows":
             wmic_cmd = "wmic qfe get hotfixid"
-            hotfix_output = subprocess.run(shlex.split(wmic_cmd), stdout=subprocess.PIPE)
+            hotfix_output = subprocess.run(shlex.split(wmic_cmd), stdout=subprocess.PIPE, shell=True)
             hotfix_output = hotfix_output.stdout.decode("utf-8", errors="ignore").replace("\r\r\n", "").split(" ")
             hotfix = [x for x in hotfix_output if x != "HotFixID" and x != ""]
             hotfix.sort()
             temp["hotfix"] = hotfix
         data.append(temp)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     return data
 
 
 # Get information on system
 def sysinfo_task():
+    logger.info("Starting sysinfo task")
     system_info = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         system_info = get_system_info()

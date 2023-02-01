@@ -4,6 +4,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.config import DATA_DIR, NIRSOFT_BROWSERADDONSVIEW
@@ -27,7 +28,7 @@ def addon_csv_to_dicts(csv_file):
                 if item["id"].find(" ") == -1:
                     data.append(item)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -38,10 +39,10 @@ def addon_scan_on_windows():
             os.mkdir(DATA_DIR)
         csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         browseraddonsview_cmd = [NIRSOFT_BROWSERADDONSVIEW, "/scomma", csv_file, "/Columns", WIN_ADDON_COLUMNS]
-        browseraddonsview_output = subprocess.run(browseraddonsview_cmd, stdout=subprocess.PIPE)
+        browseraddonsview_output = subprocess.run(browseraddonsview_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return csv_file
 
@@ -53,13 +54,14 @@ def get_addon_windows():
         if os.path.exists(addon_csv):
             data = addon_csv_to_dicts(addon_csv)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
 
 # Get Browser add-on on system
 def addons_task():
+    logger.info("Starting browser addon task")
     addon_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

@@ -4,6 +4,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.config import DATA_DIR, NIRSOFT_LASTACTIVITYVIEW
@@ -26,7 +27,7 @@ def activity_csv_to_dicts(csv_file):
             if item["action"] in WIN_ACTIVITY_FILTER:
                 data.append(item)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -37,10 +38,10 @@ def activity_scan_on_windows():
             os.mkdir(DATA_DIR)
         csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         lastactivityview_cmd = [NIRSOFT_LASTACTIVITYVIEW, "/scomma", csv_file]
-        lastactivityview_output = subprocess.run(lastactivityview_cmd, stdout=subprocess.PIPE)
+        lastactivityview_output = subprocess.run(lastactivityview_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return csv_file
 
@@ -52,13 +53,14 @@ def get_activity_windows():
         if os.path.exists(activity_csv):
             data = activity_csv_to_dicts(activity_csv)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
 
 # Last Activity on system (Windows)
 def activity_task():
+    logger.info("Starting activity task")
     activity_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":
