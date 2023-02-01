@@ -19,4 +19,4 @@ GEOIP_ZIP = ["GeoLite2-Country.zip"]
 RSA_PUB_KEY = "malcheck.pub"
 RSA_PRI_KEY = "malcheck.pri"
 PY_LAUNCHER_NAME = "malcheck_client.py"
-EXE_LAUNCHER_NAME = "malcheck_client"
+EXE_LAUNCHER_NAME = "malcheck-client"
