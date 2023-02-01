@@ -75,7 +75,7 @@ def get_system_info():
         # temp["primary_network"] = get_primary_network()
         if os_platform == "Windows":
             wmic_cmd = "wmic qfe get hotfixid"
-            hotfix_output = subprocess.run(shlex.split(wmic_cmd), stdout=subprocess.PIPE)
+            hotfix_output = subprocess.run(shlex.split(wmic_cmd), stdout=subprocess.PIPE, shell=True)
             hotfix_output = hotfix_output.stdout.decode("utf-8", errors="ignore").replace("\r\r\n", "").split(" ")
             hotfix = [x for x in hotfix_output if x != "HotFixID" and x != ""]
             hotfix.sort()

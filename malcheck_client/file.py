@@ -41,7 +41,7 @@ def sigcheck_scan_on_windows():
         for dir in target_dir:
             csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
             sigcheck_cmd = [SYSINTERNAL_SIGCHECK, "-accepteula", "-nobanner", "-a", "-c", "-e", "-h", "-w", csv_file, "-s", dir]
-            sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE)
+            sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE, shell=True)
             sigcheck_csv.append(csv_file)
             time.sleep(1)
     except Exception as ex:

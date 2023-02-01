@@ -38,7 +38,7 @@ def activity_scan_on_windows():
             os.mkdir(DATA_DIR)
         csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         lastactivityview_cmd = [NIRSOFT_LASTACTIVITYVIEW, "/scomma", csv_file]
-        lastactivityview_output = subprocess.run(lastactivityview_cmd, stdout=subprocess.PIPE)
+        lastactivityview_output = subprocess.run(lastactivityview_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
         logger.info(str(ex))

@@ -39,7 +39,7 @@ def addon_scan_on_windows():
             os.mkdir(DATA_DIR)
         csv_file = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         browseraddonsview_cmd = [NIRSOFT_BROWSERADDONSVIEW, "/scomma", csv_file, "/Columns", WIN_ADDON_COLUMNS]
-        browseraddonsview_output = subprocess.run(browseraddonsview_cmd, stdout=subprocess.PIPE)
+        browseraddonsview_output = subprocess.run(browseraddonsview_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
         logger.info(str(ex))

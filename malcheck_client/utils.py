@@ -84,7 +84,7 @@ def pe_signature_check(pe_file):
     try:
         data = dict()
         sigcheck_cmd = [SYSINTERNAL_SIGCHECK, "-accepteula", "-nobanner", pe_file]
-        sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE)
+        sigcheck_output = subprocess.run(sigcheck_cmd, stdout=subprocess.PIPE, shell=True)
         sigcheck_output = sigcheck_output.stdout.decode("utf-8", errors="ignore").replace("\t", "").splitlines()
 
         data["verified"] = sigcheck_output[1].split(":")[-1]

@@ -51,7 +51,7 @@ def autorun_scan_on_windows():
             os.mkdir(DATA_DIR)
         autorun_csv = os.path.join(DATA_DIR, ".".join([string_random(6), "tmp"]))
         autorun_cmd = [SYSINTERNAL_AUTORUN, "-accepteula", "-nobanner", "-a", "*", "-c", "-h", "-s", "-m", "-o", autorun_csv]
-        autorun_output = subprocess.run(autorun_cmd, stdout=subprocess.PIPE)
+        autorun_output = subprocess.run(autorun_cmd, stdout=subprocess.PIPE, shell=True)
         time.sleep(1)
     except Exception as ex:
         autorun_csv = ""
