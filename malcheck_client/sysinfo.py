@@ -88,6 +88,7 @@ def get_system_info():
 
 # Get information on system
 def sysinfo_task():
+    logger.info("Starting sysinfo task")
     system_info = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         system_info = get_system_info()

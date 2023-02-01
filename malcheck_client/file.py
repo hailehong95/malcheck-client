@@ -66,6 +66,7 @@ def get_sigcheck_windows():
 
 # Check files in some location of malware
 def files_task():
+    logger.info("Starting file scanning task")
     files_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

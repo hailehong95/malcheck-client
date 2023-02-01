@@ -60,6 +60,7 @@ def get_activity_windows():
 
 # Last Activity on system (Windows)
 def activity_task():
+    logger.info("Starting activity task")
     activity_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

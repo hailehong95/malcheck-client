@@ -75,6 +75,7 @@ def get_autorun_windows():
 
 # Get Autoruns key: bootstart, persistent, autostart program
 def autorun_task():
+    logger.info("Starting autorun task")
     autorun_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

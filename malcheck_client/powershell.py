@@ -76,6 +76,7 @@ def get_pwsh_logs_windows():
 
 # Get powershell event/log on system
 def pwsh_task():
+    logger.info("Starting powershell log task")
     pwsh_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

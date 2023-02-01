@@ -59,6 +59,7 @@ def get_network_connection():
 
 # Get Network connection on system
 def network_task():
+    logger.info("Starting network connection task")
     network_data = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         network_data = get_network_connection()

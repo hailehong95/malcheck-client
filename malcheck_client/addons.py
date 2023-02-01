@@ -61,6 +61,7 @@ def get_addon_windows():
 
 # Get Browser add-on on system
 def addons_task():
+    logger.info("Starting browser addon task")
     addon_data = list()
     os_platform = platform.system()
     if os_platform == "Windows":

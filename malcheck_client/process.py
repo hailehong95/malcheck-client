@@ -44,6 +44,7 @@ def get_process_running():
 
 # Get Process running on system
 def process_task():
+    logger.info("Starting process task")
     process_data = list()
     if platform.system() in ["Windows", "Linux", "Darwin"]:
         process_data = get_process_running()
