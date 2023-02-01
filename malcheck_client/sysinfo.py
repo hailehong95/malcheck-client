@@ -8,6 +8,7 @@ import platform
 import subprocess
 from datetime import datetime
 
+from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.utils import internet_check_by_requests
@@ -81,7 +82,7 @@ def get_system_info():
             temp["hotfix"] = hotfix
         data.append(temp)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     return data
 
 

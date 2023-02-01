@@ -4,6 +4,7 @@ import time
 import platform
 import subprocess
 
+from malcheck_client.logging import logger
 from malcheck_client.crypto import string_random
 from malcheck_client.utils import write_dicts_to_json_file
 from malcheck_client.config import DATA_DIR, SYSINTERNAL_AUTORUN
@@ -38,7 +39,7 @@ def autorun_csv_to_dicts(csv_file):
             }
             data.append(tmp)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
@@ -54,7 +55,7 @@ def autorun_scan_on_windows():
         time.sleep(1)
     except Exception as ex:
         autorun_csv = ""
-        print(ex)
+        logger.info(str(ex))
     else:
         return autorun_csv
 
@@ -67,7 +68,7 @@ def get_autorun_windows():
         if os.path.exists(autorun_csv):
             data = autorun_csv_to_dicts(autorun_csv)
     except Exception as ex:
-        print(ex)
+        logger.info(str(ex))
     else:
         return data
 
