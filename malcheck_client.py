@@ -4,6 +4,7 @@ import os
 import sys
 from datetime import datetime
 
+from malcheck_client.gui import message_box
 from malcheck_client.file import files_task
 from malcheck_client.addons import addons_task
 from malcheck_client.process import process_task
@@ -22,11 +23,11 @@ from malcheck_client.utils import internet_check_by_requests
 
 def main():
     if not is_admin():
-        print("This program requires run as Administrator")
+        message_box("Oops!", "This program requires run as Administrator", 0)
         sys.exit(1)
 
     if not internet_check_by_requests():
-        print("Please check your internet connection")
+        message_box("Oops!", "Please check your internet connection", 0)
         sys.exit(2)
 
     sysinfo_data = sysinfo_task()
