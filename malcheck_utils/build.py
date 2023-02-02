@@ -23,7 +23,7 @@ def malcheck_build():
         if os_platform == 'windows':
             upx_packer = os.path.join(PACKER_DIR, 'upx_win64')
             PyInstaller.__main__.run(
-                ['--clean', '--uac-admin', '--icon', icon_path, '--onefile', '--name', EXE_LAUNCHER_NAME, '--add-data',
+                ['--clean', '--uac-admin', '--icon', icon_path, '--onefile', '--noconsole', '--name', EXE_LAUNCHER_NAME, '--add-data',
                  'bins;bins', '--add-data', 'keys;keys',
                  '--distpath', release_path, '--upx-dir', upx_packer, '--key', tiny_aes_key, PY_LAUNCHER_NAME])
         elif os_platform == 'linux':
