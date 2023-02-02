@@ -3,7 +3,7 @@
 import os
 import sys
 from datetime import datetime
-
+from malcheck_client.gui import main_gui
 from malcheck_client.gui import message_box
 from malcheck_client.file import files_task
 from malcheck_client.addons import addons_task
@@ -15,8 +15,9 @@ from malcheck_client.autorun import autorun_task
 from malcheck_client.activity import activity_task
 from malcheck_client.utils import is_admin, zip_list_file
 from malcheck_client.utils import internet_check_by_requests
-# from malcheck_client.storage import storage_task
 
+
+# from malcheck_client.storage import storage_task
 # from malcheck_client.storage import object_upload
 # from malcheck_client.config import BUCKETS_NAME
 
@@ -30,6 +31,8 @@ def main():
         message_box("Oops!", "Please check your internet connection", 0)
         sys.exit(2)
 
+    main_gui()
+    """
     sysinfo_data = sysinfo_task()
     activity_data = activity_task()
     addons_data = addons_task()
@@ -41,6 +44,7 @@ def main():
     obj_path = zip_list_file()
     # Debug
     print(obj_path)
+    """
 
     # Get pre-signed URL string to upload object
     # upload_result = storage_task()
