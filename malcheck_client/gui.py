@@ -46,8 +46,7 @@ def main_gui():
         [sg.Text('Please enter your Name, Id, Address')],
         [sg.Text('Name', size=(15, 1)), sg.InputText(key='full_name')],
         [sg.Text('Id', size=(15, 1)), sg.InputText(key='user_id')],
-        [sg.Text('Address', size=(15, 1)),
-         sg.Combo(choices_, default_value=choices_[0], key='address', size=43, readonly=True)],
+        [sg.Text('Address', size=(15, 1)), sg.Combo(choices_, default_value=choices_[0], key='address', size=43, readonly=True)],
         [sg.Submit(), sg.Cancel()],
         [sg.ProgressBar(100, 'h', size=(30, 20), k='pbar', expand_x=True)]
     ]
