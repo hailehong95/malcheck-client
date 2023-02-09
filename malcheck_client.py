@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import os
 import sys
-from datetime import datetime
+
 from malcheck_client.gui import main_gui
 from malcheck_client.gui import message_box
 from malcheck_client.file import files_task
@@ -15,11 +14,7 @@ from malcheck_client.autorun import autorun_task
 from malcheck_client.activity import activity_task
 from malcheck_client.utils import is_admin, zip_list_file
 from malcheck_client.utils import internet_check_by_requests
-
-
-# from malcheck_client.storage import storage_task
-# from malcheck_client.storage import object_upload
-# from malcheck_client.config import BUCKETS_NAME
+from malcheck_client.storage import get_pre_signed_url, pre_signed_upload
 
 
 def main():
@@ -31,8 +26,8 @@ def main():
         message_box("Oops!", "Please check your internet connection", 0)
         sys.exit(2)
 
-    main_gui()
-    """
+    # main_gui()
+
     sysinfo_data = sysinfo_task()
     activity_data = activity_task()
     addons_data = addons_task()
@@ -42,16 +37,15 @@ def main():
     network_data = network_task()
     process_data = process_task()
     obj_path = zip_list_file()
-    # Debug
-    print(obj_path)
-    """
-
-    # Get pre-signed URL string to upload object
-    # upload_result = storage_task()
-    # timestamp = datetime.today()
-    # location = f"{timestamp.year}/{timestamp.month}/{os.path.basename(obj_path)}"
-    # if object_upload(location, obj_path):
-    #     print("Successful upload report!")
+    pre_signed_url = get_pre_signed_url("100123_NguyenVanAn_20230209222647.zip")
+    if pre_signed_url is None:
+        message_box("Oops!", "Failed get pre-signed url!", 0)
+        sys.exit(3)
+    upload_result = pre_signed_upload(pre_signed_url, obj_path)
+    if upload_result:
+        message_box("Oops!", "Successful upload report!", 0)
+    else:
+        message_box("Oops!", "Failed upload report!", 0)
 
 
 if __name__ == "__main__":
