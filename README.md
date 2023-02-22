@@ -90,4 +90,4 @@ to the Central Management System (SIEM/Log Management).
 
 ## 4. Systems that have been tested
 
-- Microsoft Windows: 7, 8/8.1, 10, 2012, 2016, 2019
+- Microsoft Windows: 7, 8/8.1, 10, 11, 2012, 2016, 2019
