@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import struct
 import ctypes
 import socket
@@ -156,17 +157,14 @@ def zip_list_file(report_name):
             for x in os.listdir(DATA_DIR):
                 if x.endswith(".json"):
                     json_file.append(x)
-        # tmp_name = "-".join([platform.node(), string_random(6) + ".zip"])
-        # format: address_id_name_time.zip
         tm_now = datetime.now().strftime("%Y%m%d%H%M%S")
         tmp_name = f"{report_name}_{tm_now}.zip"
-        # tmp_name = "-".join(
-        #     [platform.system().lower(), platform.node().lower(), datetime.now().strftime("%Y%m%d%H%M%S") + ".zip"])
         zip_name = os.path.join(CWD_DIR, tmp_name)
         os.chdir(DATA_DIR)
         with zipfile.ZipFile(zip_name, "w") as zipObj:
             for file_ in json_file:
                 zipObj.write(file_)
+        time.sleep(1)
         return zip_name
     except Exception as ex:
         logger.info(str(ex))
