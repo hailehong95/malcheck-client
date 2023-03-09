@@ -8,15 +8,13 @@ import hashlib
 import zipfile
 import requests
 import binascii
-import platform
 import subprocess
 import geoip2.database
 
 from datetime import datetime
 from malcheck_client.logging import logger
-from malcheck_client.crypto import string_random
-from malcheck_client.config import BINS_DIR, DATA_DIR, KEYS_DIR, BASE_DIR
-from malcheck_client.config import SYSINTERNAL_SIGCHECK, MAX_SIZE_FILE, CWD_DIR
+from malcheck_client.config import DATA_DIR, BASE_DIR, CWD_DIR
+from malcheck_client.config import SYSINTERNAL_SIGCHECK, MAX_SIZE_FILE
 
 
 def is_admin():
@@ -151,7 +149,7 @@ def write_dicts_to_json_file(dict_data, file_name):
         logger.info(str(ex))
 
 
-def zip_list_file():
+def zip_list_file(report_name):
     try:
         json_file = list()
         if os.path.exists(DATA_DIR):
@@ -159,8 +157,11 @@ def zip_list_file():
                 if x.endswith(".json"):
                     json_file.append(x)
         # tmp_name = "-".join([platform.node(), string_random(6) + ".zip"])
-        tmp_name = "-".join(
-            [platform.system().lower(), platform.node().lower(), datetime.now().strftime("%Y%m%d%H%M%S") + ".zip"])
+        # format: address_id_name_time.zip
+        tm_now = datetime.now().strftime("%Y%m%d%H%M%S")
+        tmp_name = f"{report_name}_{tm_now}.zip"
+        # tmp_name = "-".join(
+        #     [platform.system().lower(), platform.node().lower(), datetime.now().strftime("%Y%m%d%H%M%S") + ".zip"])
         zip_name = os.path.join(CWD_DIR, tmp_name)
         os.chdir(DATA_DIR)
         with zipfile.ZipFile(zip_name, "w") as zipObj:
@@ -223,3 +224,32 @@ def geoip_country(db_path, ip_list):
             ip_country[ip] = "unknown"
             logger.info(str(ex))
     return ip_country
+
+
+#  Styles:
+#  0 : OK
+#  1 : OK | Cancel
+#  2 : Abort | Retry | Ignore
+#  3 : Yes | No | Cancel
+#  4 : Yes | No
+#  5 : Retry | Cancel
+#  6 : Cancel | Try Again | Continue
+def message_box(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
+
+def form_validate(values):
+    try:
+        input_name = values["full_name"]
+        input_id = values["user_id"]
+        if len(input_name) == 0 or len(input_id) == 0:
+            return False
+        if len(input_id) != 6:
+            return False
+        if not input_name.replace(" ", "").isalpha():
+            return False
+        if not input_id.isnumeric():
+            return False
+    except Exception as ex:
+        return False
+    return True
