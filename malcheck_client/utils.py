@@ -6,6 +6,7 @@ import ctypes
 import socket
 import urllib
 import hashlib
+import secrets
 import zipfile
 import requests
 import binascii
@@ -35,6 +36,10 @@ def get_primary_ip_without_internet(host="10.255.255.255", port=1):
     finally:
         sk.close()
     return primary_ip
+
+
+def gen_token_hex(n):
+    return secrets.token_hex(n)
 
 
 def get_primary_ip_with_internet(host="www.google.com", port=80, timeout=5):
