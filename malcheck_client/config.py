@@ -14,5 +14,5 @@ NIRSOFT_BROWSERADDONSVIEW = os.path.join(BINS_DIR, "BrowserAddonsView.exe")
 GEOLITE2_DB = os.path.join(BINS_DIR, "GeoLite2-Country.mmdb")
 NIRSOFT_CPORTS = os.path.join(BINS_DIR, "cports.exe")
 LOG_PATH = os.path.join(CWD_DIR, "malcheck-client.log")
-MALCHECK_WEBSERVER = "http://example.site/api/v1/getUploadFileUrl"
-MAX_SIZE_FILE = 12 * 1024 * 1024  # 12MB
+MALCHECK_BASE_URL = "http://example.localhost"
+MAX_SIZE_FILE = 25 * 1024 * 1024  # 25MB
