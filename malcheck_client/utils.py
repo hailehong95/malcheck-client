@@ -16,6 +16,7 @@ import geoip2.database
 from datetime import datetime
 from malcheck_client.logging import logger
 from malcheck_client.config import DATA_DIR, BASE_DIR, CWD_DIR
+from malcheck_client.config import MALCHECK_EXE_PATH, CLEAN_UP_SCRIPT
 from malcheck_client.config import SYSINTERNAL_SIGCHECK, MAX_SIZE_FILE
 
 
@@ -256,3 +257,17 @@ def form_validate(values):
     except Exception as ex:
         return False
     return True
+
+
+def self_clean():
+    try:
+        file_name = os.path.basename(MALCHECK_EXE_PATH)
+        cmd_1 = "ping 127.0.0.1 -n 2 > nul"
+        cmd_2 = f"TASKKILL /F /IM \"{file_name}\""
+        cmd_3 = f"DEL /F \"{MALCHECK_EXE_PATH}\""
+        cmd_4 = f"DEL /F \"{CLEAN_UP_SCRIPT}\""
+        with open(CLEAN_UP_SCRIPT, "w+") as file:
+            file.write(f"{cmd_1}\n{cmd_2}\n{cmd_3}\n{cmd_4}")
+        subprocess.Popen([CLEAN_UP_SCRIPT], shell=True, creationflags=subprocess.SW_HIDE)
+    except Exception as ex:
+        logger.info(str(ex))
