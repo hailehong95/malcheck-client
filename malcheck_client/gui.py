@@ -26,7 +26,7 @@ def thread_task(window, progress_bar, user_info):
         status_code, hex_token = user_checkin(user_info)
         if status_code != 200:
             show_message_box(window, "Oops!", "Failed to register with server", 0)
-        
+
         # Start checking
         sysinfo_data = sysinfo_task()
         progress_bar.update_bar(1, 10)
@@ -52,30 +52,35 @@ def thread_task(window, progress_bar, user_info):
         process_data = process_task()
         progress_bar.update_bar(8, 10)
 
-        # Send report to server
+        # zip compress report
         report_name = f"{user_info['address']}_{user_info['emp_id']}_{user_info['name']}"
         obj_path = zip_list_file(report_name)
         progress_bar.update_bar(9, 10)
 
+        # get upload url from server
         obj_name = os.path.basename(obj_path)
         pre_signed_url = user_get_upload_url(obj_name)
         if pre_signed_url is None:
             show_message_box(window, "Oops!", "Failed get upload url!", 0)
+
+        # send report to server
         upload_result = user_upload(pre_signed_url, obj_path)
         time.sleep(1)
         progress_bar.update_bar(10, 10)
-        if upload_result:
-            show_message_box(window, "Successful!", "Successful upload report!", 0)
-        else:
-            show_message_box(window, "Oops!", "Failed upload report!", 0)
-        
+
         # send POST request to finish scanning
-        ck_out = user_checkout(user_info, hex_token)
-        
+        if upload_result:
+            ck_out = user_checkout(user_info, hex_token)
+
         # cleaning report
         if os.path.isfile(obj_path):
             os.remove(obj_path)
         time.sleep(1)
+
+        if upload_result:
+            show_message_box(window, "Successful!", "Successful upload report!", 0)
+        else:
+            show_message_box(window, "Oops!", "Failed upload report!", 0)
     except Exception as ex:
         logger.info(str(ex))
 
